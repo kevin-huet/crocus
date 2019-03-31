@@ -35,19 +35,21 @@ static void check_who_change(number_t *number, int check, char c)
         : (check == 7) ? number->nb_7 = change_char_nb(number->nb_7, c)
         : (check == 8) ? number->nb_8 = change_char_nb(number->nb_8, c)
         : (check == 9) ? number->nb_9 = change_char_nb(number->nb_9, c)
-        : exit(84);
+        : NULL;
 }
 
 void change_number(number_t *number, char *str, char *nb)
 {
-    int max_str = strlen(str) - 1;
+    int max_str = strlen(str);
     int check = 0;
     int col = 0;
     for (size_t i = 0; nb[i]; i++) {
         check = nb[i] - '0';
         col = check;
-        if (col > max_str)
-            col = (col - max_str - 1);
+        while (col > max_str)
+            col = (col % max_str);
+        if (str[col] == 0)
+            col = 0;
         check_who_change(number, check, str[col]);
     }
 }
